@@ -5,6 +5,19 @@
         </h2>
     </x-slot>
 
+    <!-- Loading Overlay Premium -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center max-w-sm mx-4 text-center">
+            <!-- Spinner -->
+            <svg class="animate-spin h-12 w-12 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Memproses Pemesanan</h3>
+            <p class="text-sm text-gray-500">Mohon tunggu sebentar, sistem sedang mengalokasikan isolated S3 bucket dan menerbitkan kredensial MiniStack untuk Anda...</p>
+        </div>
+    </div>
+
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
@@ -37,7 +50,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('storage.purchase') }}" method="POST">
+                    <form id="checkoutForm" action="{{ route('storage.purchase') }}" method="POST">
                         @csrf
                         <input type="hidden" name="package_id" value="{{ $package->id }}">
                         
@@ -54,4 +67,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Script to Trigger Spinner on Submit -->
+    <script>
+        document.getElementById('checkoutForm').addEventListener('submit', function() {
+            // Tampilkan loading overlay premium
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+        });
+    </script>
 </x-app-layout>

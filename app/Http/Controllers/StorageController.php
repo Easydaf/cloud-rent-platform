@@ -17,7 +17,13 @@ class StorageController extends Controller
     public function packages()
     {
         $packages = Package::where('is_active', true)->get();
-        return view('storage.packages', compact('packages'));
+        $activeSubscription = Auth::user()->subscriptions()
+            ->where('status', 'active')
+            ->where('expires_at', '>', now())
+            ->orderBy('created_at', 'desc')
+            ->first();
+            
+        return view('storage.packages', compact('packages', 'activeSubscription'));
     }
 
     /**
