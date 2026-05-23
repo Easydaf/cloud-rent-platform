@@ -93,11 +93,27 @@ class StorageController extends Controller
     /**
      * Tampilkan riwayat aktivitas / logs.
      */
-    public function logs()
+    public function logs(Request $request)
     {
-        $logs = ActivityLog::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = ActivityLog::where('user_id', Auth::id());
+
+        // Filter berdasarkan pencarian kata kunci (action atau service)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('action', 'like', '%' . $search . '%')
+                  ->orWhere('service', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter berdasarkan status (success / failed)
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $logs = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('logs.index', compact('logs'));
     }
