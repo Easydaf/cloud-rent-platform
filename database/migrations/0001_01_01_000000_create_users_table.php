@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('bucket_name', 100)->nullable();
+            $table->string('aws_access_key_id', 255)->nullable();
+            $table->string('aws_secret_access_key', 255)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

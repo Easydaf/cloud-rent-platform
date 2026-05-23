@@ -21,30 +21,35 @@
                         <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Paket Langganan</h3>
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-gray-600">Nama Paket</span>
-                            <span class="font-bold text-gray-900 text-lg">{{ $selectedPlan['name'] }}</span>
+                            <span class="font-bold text-gray-900 text-lg">{{ $package->package_name }}</span>
                         </div>
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-gray-600">Kapasitas Penyimpanan</span>
-                            <span class="font-medium text-gray-900">{{ $selectedPlan['storage'] }}</span>
+                            <span class="font-medium text-gray-900">{{ $package->storage_limit_gb }} GB</span>
                         </div>
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-gray-600">Deskripsi Layanan</span>
-                            <span class="font-medium text-gray-900 text-right w-1/2">{{ $selectedPlan['desc'] }}</span>
+                            <span class="font-medium text-gray-900 text-right w-1/2">{{ $package->description }}</span>
                         </div>
                         <div class="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
                             <span class="font-bold text-gray-800">Total Pembayaran</span>
-                            <span class="text-2xl font-extrabold text-blue-600">Rp {{ number_format($selectedPlan['price'], 0, ',', '.') }}</span>
+                            <span class="text-2xl font-extrabold text-blue-600">Rp {{ number_format($package->price, 0, ',', '.') }}</span>
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                        <a href="{{ route('storage.packages') }}" class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Kembali
-                        </a>
-                        <button onclick="alert('Ini akan memanggil fungsi S3 / AWS SDK milik Iki. Tunggu API-nya!')" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Konfirmasi & Proses
-                        </button>
-                    </div>
+                    <form action="{{ route('storage.purchase') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="package_id" value="{{ $package->id }}">
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                            <a href="{{ route('storage.packages') }}" class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Kembali
+                            </a>
+                            <button type="submit" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Konfirmasi & Proses
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

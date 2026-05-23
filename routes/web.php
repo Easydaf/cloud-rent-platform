@@ -12,26 +12,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    // Frontend UI Routes for Kim (Storage & Logs) - Menggunakan view dengan Mock Data
-    Route::get('/storage/packages', function () {
-        return view('storage.packages');
-    })->name('storage.packages');
-
-    // Route untuk konfirmasi paket yang dipilih user
-    Route::get('/storage/confirm/{plan}', function ($plan) {
-        $planDetails = [
-            'basic' => ['name' => 'Basic', 'price' => 50000, 'storage' => '10 GB', 'desc' => 'Sempurna untuk personal dan tugas kuliah.'],
-            'pro' => ['name' => 'Pro', 'price' => 150000, 'storage' => '50 GB', 'desc' => 'Ideal untuk tim dan developer profesional.'],
-            'enterprise' => ['name' => 'Enterprise', 'price' => 500000, 'storage' => '500 GB', 'desc' => 'Skalabilitas penuh untuk proyek besar.'],
-        ];
-        
-        $selectedPlan = $planDetails[$plan] ?? $planDetails['basic'];
-        return view('storage.confirm', compact('selectedPlan', 'plan'));
-    })->name('storage.confirm');
-    
-    Route::get('/logs', function () {
-        return view('logs.index');
-    })->name('logs.index');
+    // Routes for Storage Rental and Activity Logs (Kim's Jobdesk - Integrated with DB)
+    Route::get('/storage/packages', [App\Http\Controllers\StorageController::class, 'packages'])->name('storage.packages');
+    Route::get('/storage/confirm/{slug}', [App\Http\Controllers\StorageController::class, 'confirm'])->name('storage.confirm');
+    Route::post('/storage/purchase', [App\Http\Controllers\StorageController::class, 'purchase'])->name('storage.purchase');
+    Route::get('/logs', [App\Http\Controllers\StorageController::class, 'logs'])->name('logs.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
