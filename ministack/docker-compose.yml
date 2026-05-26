@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: ministack_container
+    image: localstack/localstack:3.4.0       # Mengunci versi agar tidak dipaksa menggunakan token login
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,iam
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - "./localstack_data:/var/lib/localstack"
